@@ -86,6 +86,13 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Minimum price - ₹"+widget.model!.minPrice.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            ),
+          ),
           const SizedBox(height: 10,),
 
           Center(

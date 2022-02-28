@@ -154,6 +154,7 @@ class _MenusUploadScreenState extends State<MenusUploadScreen>
       source: ImageSource.camera,
       maxHeight: 720 ,
       maxWidth: 1280,
+      imageQuality: 85,
     );
 
     setState(() {
@@ -169,6 +170,7 @@ class _MenusUploadScreenState extends State<MenusUploadScreen>
       source: ImageSource.gallery,
       maxHeight: 720 ,
       maxWidth: 1280,
+      imageQuality: 85,
     );
 
     setState(() {

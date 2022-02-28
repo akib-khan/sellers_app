@@ -5,6 +5,7 @@ import 'package:sellers_app/mainScreens/earnings_screen.dart';
 import 'package:sellers_app/mainScreens/history_screen.dart';
 import 'package:sellers_app/mainScreens/home_screen.dart';
 import 'package:sellers_app/mainScreens/new_orders_screen.dart';
+import 'package:share_plus/share_plus.dart';
 
 
 
@@ -28,8 +29,8 @@ class MyDrawer extends StatelessWidget
                   child: Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: Container(
-                      height: 160,
-                      width: 160,
+                      height: 100,
+                      width: 100,
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
                           sharedPreferences!.getString("photoUrl")!
@@ -116,6 +117,24 @@ class MyDrawer extends StatelessWidget
                   onTap: ()
                   {
                     Navigator.push(context, MaterialPageRoute(builder: (c)=>  HistoryScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.exit_to_app, color: Colors.black,),
+                  title: const Text(
+                    "Share",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: ()
+                  async {
+                    //final box = context.findRenderObject() as RenderBox?;
+                    await Share.share(sharedPreferences!.getString("appUrl")!,
+                    );
                   },
                 ),
                 const Divider(

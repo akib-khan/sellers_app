@@ -34,6 +34,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController discountPriceController = TextEditingController();
+  TextEditingController minPriceController = TextEditingController();
 
   bool uploading = false;
   String uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -160,6 +161,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       source: ImageSource.camera,
       maxHeight: 720 ,
       maxWidth: 1280,
+      imageQuality: 85,
     );
 
     setState(() {
@@ -175,6 +177,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       source: ImageSource.gallery,
       maxHeight: 720 ,
       maxWidth: 1280,
+      imageQuality: 85,
     );
 
     setState(() {
@@ -353,6 +356,26 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
             color: Colors.amber,
             thickness: 1,
           ),
+          ListTile(
+            leading: const Icon(Icons.camera,  color: Colors.cyan,),
+            title: Container(
+              width: 250,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                style: const TextStyle(color: Colors.black),
+                controller: minPriceController,
+                decoration: const InputDecoration(
+                  hintText: "Minimum price ",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+           const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
         ],
       ),
     );
@@ -365,6 +388,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       titleController.clear();
       priceController.clear();
       discountPriceController.clear();
+      minPriceController.clear();
       descriptionController.clear();
 
       imageXFile = null;
@@ -375,7 +399,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   {
     if(imageXFile != null)
     {
-      if(shortInfoController.text.isNotEmpty && titleController.text.isNotEmpty && descriptionController.text.isNotEmpty && priceController.text.isNotEmpty && discountPriceController.text.isNotEmpty ) 
+      if(shortInfoController.text.isNotEmpty && titleController.text.isNotEmpty && descriptionController.text.isNotEmpty && priceController.text.isNotEmpty && discountPriceController.text.isNotEmpty && minPriceController.text.isNotEmpty) 
       {
         setState(() {
           uploading = true;
@@ -431,6 +455,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       "longDescription": descriptionController.text.toString(),
       "price": int.parse(priceController.text),
       "discountPrice": int.parse(discountPriceController.text),
+      "minPrice": int.parse(minPriceController.text),
       "title": titleController.text.toString(),
       "publishedDate": DateTime.now(),
       "status": "available",
@@ -449,6 +474,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
         "longDescription": descriptionController.text.toString(),
         "price": int.parse(priceController.text),
         "discountPrice": int.parse(discountPriceController.text),
+        "minPrice": int.parse(minPriceController.text),
         "title": titleController.text.toString(),
         "publishedDate": DateTime.now(),
         "status": "available",

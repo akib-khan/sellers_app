@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sellers_app/global/global.dart';
+import 'package:sellers_app/mainScreens/firebase_dynamic_link.dart';
 import 'package:sellers_app/mainScreens/home_screen.dart';
 import 'package:sellers_app/widgets/custom_text_field.dart';
 import 'package:sellers_app/widgets/error_dialog.dart';
@@ -56,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   Future<void> _getImage() async
   {
-    imageXFile = await _picker.pickImage(source: ImageSource.gallery);
+    imageXFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
     setState(() {
       imageXFile;
     });
@@ -187,13 +188,16 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   Future saveDataToFirestore(User currentUser) async
   {
-    FirebaseFirestore.instance.collection("sellers").doc(currentUser.uid).set({
+    FirebaseDynamicLinkService.createDynamicLink(true, currentUser.uid ).then( (appUrl) async {
+      print(appUrl);
+      FirebaseFirestore.instance.collection("sellers").doc(currentUser.uid).set({
       "sellerUID": currentUser.uid,
       "sellerEmail": currentUser.email,
       "sellerName": nameController.text.trim(),
       "sellerCategory": selectedValue,
       "sellerAvatarUrl": sellerImageUrl,
       "phone": phoneController.text.trim(),
+      "appUrl": appUrl,
       "address": completeAddress,
       "status": "approved",
       "earnings": 0.0,
@@ -208,6 +212,8 @@ class _RegisterScreenState extends State<RegisterScreen>
     await sharedPreferences!.setString("category", selectedValue! );
     await sharedPreferences!.setString("name", nameController.text.trim());
     await sharedPreferences!.setString("photoUrl", sellerImageUrl);
+    await sharedPreferences!.setString("appUrl", appUrl);
+    });
   }
 
   @override

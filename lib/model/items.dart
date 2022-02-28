@@ -13,6 +13,7 @@ class Items
   String? status;
   int? price;
   int? discountPrice;
+  int? minPrice;
 
   Items({
     this.menuID,
@@ -39,6 +40,7 @@ class Items
     status = json['status'];
     price = json['price'];
     discountPrice = json.containsKey("discountPrice")?json['discountPrice']:price;
+    minPrice = json.containsKey("minPrice")?json['minPrice']:price;
   }
 
   Map<String, dynamic> toJson()

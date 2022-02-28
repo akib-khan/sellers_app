@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sellers_app/authentication/auth_screen.dart';
 import 'package:sellers_app/global/global.dart';
+import 'package:sellers_app/mainScreens/firebase_dynamic_link.dart';
 import 'package:sellers_app/mainScreens/home_screen.dart';
 import 'package:sellers_app/widgets/custom_text_field.dart';
 import 'package:sellers_app/widgets/error_dialog.dart';
@@ -91,11 +92,28 @@ class _LoginScreenState extends State<LoginScreen>
         .then((snapshot) async {
           if(snapshot.exists)
           {
+            //String appUrl;
             await sharedPreferences!.setString("uid", currentUser.uid);
             await sharedPreferences!.setString("email", snapshot.data()!["sellerEmail"]);
             await sharedPreferences!.setString("name", snapshot.data()!["sellerName"]);
             await sharedPreferences!.setString("photoUrl", snapshot.data()!["sellerAvatarUrl"]);
 
+            if( snapshot.data()!.containsKey("appUrl") ) {
+              print("key exist!! ${snapshot.data()!["appUrl"]}");
+              await sharedPreferences!.setString("appUrl", snapshot.data()!["appUrl"]); 
+            }
+            else {
+              print(" key does not exist creating");
+              FirebaseDynamicLinkService.createDynamicLink(true, currentUser.uid ).then( (appUrl_) async {
+                  print(" Key created: $appUrl_");
+                  await sharedPreferences!.setString("appUrl", appUrl_);
+                  FirebaseFirestore.instance.collection("sellers").doc(currentUser.uid).update({
+                    "appUrl": appUrl_,
+                  });
+              });
+
+            }
+            
             Navigator.pop(context);
             Navigator.push(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
           }
