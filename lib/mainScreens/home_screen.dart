@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:sellers_app/authentication/auth_screen.dart';
 import 'package:sellers_app/global/global.dart';
+import 'package:sellers_app/mainScreens/itemsScreen.dart';
 import 'package:sellers_app/model/menus.dart';
 import 'package:sellers_app/uploadScreens/menus_upload_screen.dart';
 import 'package:sellers_app/widgets/info_design.dart';
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    //Menus model1;
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.post_add, color: Colors.cyan,),
             onPressed: ()
             {
-              Navigator.push(context, MaterialPageRoute(builder: (c)=> const MenusUploadScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen()));
             },
           ),
         ],
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stream: FirebaseFirestore.instance
                 .collection("sellers")
                 .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
+                .collection("items")
                 .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, snapshot)
@@ -76,11 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index)
                       {
-                        Menus model = Menus.fromJson(
+                        Menus model1= Menus.fromJson(
                           snapshot.data!.docs[index].data()! as Map<String, dynamic>,
                         );
                         return InfoDesignWidget(
-                          model: model,
+                          model: model1,
                           context: context,
                         );
                       },

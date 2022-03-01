@@ -15,8 +15,8 @@ import 'package:sellers_app/widgets/text_widget_header.dart';
 
 class ItemsScreen extends StatefulWidget
 {
-  final Menus? model;
-  ItemsScreen({this.model});
+//  final Menus? model;
+  ItemsScreen();
 
   @override
   _ItemsScreenState createState() => _ItemsScreenState();
@@ -55,7 +55,7 @@ class _ItemsScreenState extends State<ItemsScreen>
             icon: const Icon(Icons.library_add, color: Colors.cyan,),
             onPressed: ()
             {
-              Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsUploadScreen(model: widget.model)));
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsUploadScreen()));
             },
           ),
         ],
@@ -63,14 +63,13 @@ class _ItemsScreenState extends State<ItemsScreen>
       drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: "My " + widget.model!.menuTitle.toString() + "'s Items")),
+          SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: "My Items")),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")
                 .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
-                .doc(widget.model!.menuID)
-                .collection("items").snapshots(),
+                .collection("items")
+                .snapshots(),
             builder: (context, snapshot)
             {
               return !snapshot.hasData

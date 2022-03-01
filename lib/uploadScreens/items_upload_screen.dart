@@ -14,8 +14,8 @@ import 'package:firebase_storage/firebase_storage.dart' as storageRef;
 
 class ItemsUploadScreen extends StatefulWidget
 {
-  final Menus? model;
-  ItemsUploadScreen({this.model});
+  //final Menus? model;
+  ItemsUploadScreen();
 
 
   @override
@@ -124,7 +124,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       builder: (context)
       {
         return SimpleDialog(
-          title: const Text("Menu Image", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),),
+          title: const Text("Item Image", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),),
           children: [
             SimpleDialogOption(
               child: const Text(
@@ -159,8 +159,8 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
 
     imageXFile = await _picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 720 ,
-      maxWidth: 1280,
+      maxHeight: 200 ,
+      maxWidth: 400,
       imageQuality: 85,
     );
 
@@ -175,8 +175,8 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
 
     imageXFile = await _picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 720 ,
-      maxWidth: 1280,
+      maxHeight: 200 ,
+      maxWidth: 400,
       imageQuality: 85,
     );
 
@@ -237,7 +237,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
         children: [
           uploading == true ? linearProgress() : const Text(""),
           Container(
-            height: 230,
+            height: 220,
             width: MediaQuery.of(context).size.width * 0.8,
             child: Center(
               child: AspectRatio(
@@ -443,12 +443,11 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
     final ref = FirebaseFirestore.instance
         .collection("sellers")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus").doc(widget.model!.menuID)
         .collection("items");
 
     ref.doc(uniqueIdName).set({
       "itemID": uniqueIdName,
-      "menuID": widget.model!.menuID,
+      //"menuID": widget.model!.menuID,
       "sellerUID": sharedPreferences!.getString("uid"),
       "sellerName": sharedPreferences!.getString("name"),
       "shortInfo": shortInfoController.text.toString(),
@@ -467,7 +466,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
 
       itemsRef.doc(uniqueIdName).set({
         "itemID": uniqueIdName,
-        "menuID": widget.model!.menuID,
+        //"menuID": widget.model!.menuID,
         "sellerUID": sharedPreferences!.getString("uid"),
         "sellerName": sharedPreferences!.getString("name"),
         "shortInfo": shortInfoController.text.toString(),

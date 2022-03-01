@@ -26,11 +26,11 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget>
   {
     FirebaseFirestore.instance.collection("sellers")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus")
+        .collection("items")
         .doc(menuID)
         .delete();
 
-    Fluttertoast.showToast(msg: "Menu Deleted Successfully.");
+    Fluttertoast.showToast(msg: "Item Deleted Successfully.");
   }
 
   @override
@@ -38,7 +38,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget>
     return InkWell(
       onTap: ()
       {
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen(model: widget.model)));
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen()));
       },
       splashColor: Colors.amber,
       child: Padding(

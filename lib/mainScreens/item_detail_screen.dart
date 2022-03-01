@@ -29,8 +29,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
     FirebaseFirestore.instance
         .collection("sellers")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus")
-        .doc(widget.model!.menuID!)
         .collection("items")
         .doc(itemID)
         .delete().then((value)
@@ -53,7 +51,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
       body: ListView(
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(widget.model!.thumbnailUrl.toString()),
+          Image.network(widget.model!.thumbnailUrl.toString(), height: 300, ),
 
           Padding(
             padding: const EdgeInsets.all(8.0),

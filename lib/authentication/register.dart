@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+//import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sellers_app/global/global.dart';
 import 'package:sellers_app/mainScreens/firebase_dynamic_link.dart';
 import 'package:sellers_app/mainScreens/home_screen.dart';
@@ -17,14 +19,29 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
 import 'package:shared_preferences/shared_preferences.dart';
 
-String? selectedValue;
-List<String> genderItems = [
-  'Women Wear',
-  'Men Wear',
-  'Kids Wear',
-  'Women and Men Wear',
-  'Mobile',
-  'Electronics',
+String? selectedValue = "";
+
+class Category {
+  final int id;
+  final String name;
+
+  Category({
+    required this.id,
+    required this.name,
+  });
+}
+List<Category?> category_values=[];
+
+List<Category> genderItems = [
+  Category(id:1, name:'Women Wear'),
+  Category(id:2, name:'Men Wear'),
+  Category(id:3, name:'Kids Wear'),
+  Category(id:4, name:'Footwear'),
+  Category(id:5, name:'Bags & Wallets'),
+  Category(id:6, name:'Mobile'),
+  Category(id:7, name:'Toys'),
+  Category(id:8, name:'Stationary'),
+  Category(id:9, name:'Beuty and Skincare')
 ];
 
 
@@ -66,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   getCurrentLocation() async
   {
     Position newPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      desiredAccuracy: LocationAccuracy.best,
     );
 
     position = newPosition;
@@ -101,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     {
       if(passwordController.text == confirmPasswordController.text)
       {
-        if(confirmPasswordController.text.isNotEmpty && emailController.text.isNotEmpty && nameController.text.isNotEmpty && phoneController.text.isNotEmpty && locationController.text.isNotEmpty)
+        if(confirmPasswordController.text.isNotEmpty && emailController.text.isNotEmpty && nameController.text.isNotEmpty && phoneController.text.isNotEmpty && locationController.text.isNotEmpty && selectedValue!="" )
         {
           //start uploading image
           showDialog(
@@ -193,8 +210,8 @@ class _RegisterScreenState extends State<RegisterScreen>
       FirebaseFirestore.instance.collection("sellers").doc(currentUser.uid).set({
       "sellerUID": currentUser.uid,
       "sellerEmail": currentUser.email,
-      "sellerName": nameController.text.trim(),
-      "sellerCategory": selectedValue,
+      "sellerName": nameController.text.trim().toUpperCase(),
+      "sellerCategory": selectedValue!.toUpperCase(),
       "sellerAvatarUrl": sellerImageUrl,
       "phone": phoneController.text.trim(),
       "appUrl": appUrl,
@@ -210,7 +227,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     await sharedPreferences!.setString("uid", currentUser.uid);
     await sharedPreferences!.setString("email", currentUser.email.toString());
     await sharedPreferences!.setString("category", selectedValue! );
-    await sharedPreferences!.setString("name", nameController.text.trim());
+    await sharedPreferences!.setString("name", nameController.text.trim().toUpperCase());
     await sharedPreferences!.setString("photoUrl", sellerImageUrl);
     await sharedPreferences!.setString("appUrl", appUrl);
     });
@@ -250,74 +267,47 @@ class _RegisterScreenState extends State<RegisterScreen>
                   CustomTextField(
                     data: Icons.person,
                     controller: nameController,
-                    hintText: "Name",
+                    hintText: "Shop Name",
                     isObsecre: false,
                   ),
                   Container(
+                    decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   margin: const EdgeInsets.all(10),
-                  child: DropdownButtonFormField2(
-                    decoration: InputDecoration(
-                    //Add isDense true and zero Padding.
-                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      
-                    ),
-                    //Add more decoration as you want here
-                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                    ),
-                    isExpanded: true,
-                    hint: const Text(
-                      'Category',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    icon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black45,
-                    ),
-                    iconSize: 30,
-                    buttonHeight: 60,
-                    dropdownOverButton: false,
-                    offset: const Offset(0,-50),
-                    buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                    buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      //margin: const EdgeInsets.all(10),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: Colors.white,
-                    ),
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    items: genderItems
-                      .map((item) =>
-                      DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: const TextStyle(
-                            fontSize: 14,
+                  padding: const EdgeInsets.all(8.0),
+                  child: MultiSelectDialogField(
+                        items: genderItems.map((e) => MultiSelectItem<Category?>(e,e.name)).toList(),
+                        backgroundColor: Colors.white,
+                        barrierColor: Colors.white,
+                        autovalidateMode: AutovalidateMode.always,
+                        /*buttonIcon: Icon(
+                          Icons.person,
+                          color: Colors.cyan,
+                        ),*/
+                        searchable: true,
+                        searchHint: "Category",
+                        buttonText:Text("Category"),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
-                        ),
-                      ))
-                      .toList(),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select gender.';
-                      }
-                    },
-                    onChanged: (value) {
-                      selectedValue = value.toString();
-                    },
-                    onSaved: (value) {
-                      selectedValue = value.toString();
-                    },
-                ),
+                        //title:"category",
+                        listType: MultiSelectListType.LIST,
+                        onConfirm: (values) {
+                          if( values.isNotEmpty ) {
+                            category_values = values as List<Category?>;
+                            print(" values are: ${category_values[0]?.name} ");
+                            for (var category in category_values) {
+                              //String tmp = category?.name.toString();
+                              selectedValue =  selectedValue! + (category?.name)! + ",";
+                            }
+                            print("selected values are: $selectedValue");
+                          }
+                          //category_values = values as List<Category?>;
+                        },
+                    ),
                   ),
                   CustomTextField(
                     data: Icons.email,

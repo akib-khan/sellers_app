@@ -352,7 +352,7 @@ class _MenusUploadScreenState extends State<MenusUploadScreen>
     final ref = FirebaseFirestore.instance
         .collection("sellers")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus");
+        .collection("items");
 
     ref.doc(uniqueIdName).set({
       "menuID": uniqueIdName,
@@ -369,7 +369,7 @@ class _MenusUploadScreenState extends State<MenusUploadScreen>
     //clearMenusUploadForm();
     Timestamp? ts = Timestamp.fromDate(DateTime.now());//.microsecondsSinceEpoch as Timestamp;
     final Menus? model1 = Menus(menuID:uniqueIdName, sellerUID:sharedPreferences!.getString("uid"), menuTitle:titleController.text.toString(), menuInfo:shortInfoController.text.toString(),publishedDate: ts, thumbnailUrl:downloadUrl, status:"available");
-    Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen(model: model1)));
+    Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen()));
     setState(() {
       uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
       uploading = false;
@@ -382,7 +382,7 @@ class _MenusUploadScreenState extends State<MenusUploadScreen>
     storageRef.Reference reference = storageRef.FirebaseStorage
         .instance
         .ref()
-        .child("menus");
+        .child("items");
 
     storageRef.UploadTask uploadTask = reference.child(uniqueIdName + ".jpg").putFile(mImageFile);
 
