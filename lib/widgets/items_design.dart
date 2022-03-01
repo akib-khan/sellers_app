@@ -57,7 +57,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget> {
               ),
               const SizedBox(height: 2.0,),
               Text(
-                widget.model!.shortInfo!,
+                widget.model!.longDescription!,
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 12,

@@ -29,7 +29,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   XFile? imageXFile;
   final ImagePicker _picker = ImagePicker();
 
-  TextEditingController shortInfoController = TextEditingController();
+  //TextEditingController shortInfoController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -236,30 +236,44 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       body: ListView(
         children: [
           uploading == true ? linearProgress() : const Text(""),
-          Container(
+          InkWell(
+              onTap: ()
+              {
+                takeImage(context);
+              },
+          child: Container(
             height: 220,
             width: MediaQuery.of(context).size.width * 0.8,
             child: Center(
               child: AspectRatio(
                 aspectRatio: 16/9,
                 child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: FileImage(
-                          File(imageXFile!.path)
-                      ),
+                    child: imageXFile == null?
+                    Icon(
+                      Icons.add_photo_alternate,
+                      size: MediaQuery.of(context).size.width * 0.20,
+                      color: Colors.grey,
+                    ) 
+                    : Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage( 
+                           image: FileImage(
+                              File(imageXFile!.path)
+                          ),
                       fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
                 ),
               ),
             ),
+          ),
           ),
           const Divider(
             color: Colors.amber,
             thickness: 1,
           ),
-          ListTile(
+          /*ListTile(
             leading: const Icon(Icons.perm_device_information,  color: Colors.cyan,),
             title: Container(
               width: 250,
@@ -277,7 +291,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
           const Divider(
             color: Colors.amber,
             thickness: 1,
-          ),
+          ),*/
           ListTile(
             leading: const Icon(Icons.title,  color: Colors.cyan,),
             title: Container(
@@ -286,7 +300,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
                 style: const TextStyle(color: Colors.black),
                 controller: titleController,
                 decoration: const InputDecoration(
-                  hintText: "title",
+                  hintText: "Title - Brand Name/Type",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -305,7 +319,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
                 style: const TextStyle(color: Colors.black),
                 controller: descriptionController,
                 decoration: const InputDecoration(
-                  hintText: "description",
+                  hintText: "Description - Color/Size",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -325,7 +339,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
                 style: const TextStyle(color: Colors.black),
                 controller: priceController,
                 decoration: const InputDecoration(
-                  hintText: "price",
+                  hintText: "Price",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -345,7 +359,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
                 style: const TextStyle(color: Colors.black),
                 controller: discountPriceController,
                 decoration: const InputDecoration(
-                  hintText: "price after discount",
+                  hintText: "Price after discount",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -384,7 +398,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   clearMenusUploadForm()
   {
     setState(() {
-      shortInfoController.clear();
+      //shortInfoController.clear();
       titleController.clear();
       priceController.clear();
       discountPriceController.clear();
@@ -399,7 +413,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   {
     if(imageXFile != null)
     {
-      if(shortInfoController.text.isNotEmpty && titleController.text.isNotEmpty && descriptionController.text.isNotEmpty && priceController.text.isNotEmpty && discountPriceController.text.isNotEmpty && minPriceController.text.isNotEmpty) 
+      if(/*shortInfoController.text.isNotEmpty &&*/ titleController.text.isNotEmpty && descriptionController.text.isNotEmpty && priceController.text.isNotEmpty && discountPriceController.text.isNotEmpty && minPriceController.text.isNotEmpty) 
       {
         setState(() {
           uploading = true;
@@ -418,7 +432,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
             builder: (c)
             {
               return ErrorDialog(
-                message: "Please write title and info for menu.",
+                message: "Please write title and info for Item.",
               );
             }
         );
@@ -431,7 +445,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
           builder: (c)
           {
             return ErrorDialog(
-              message: "Please pick an image for menu.",
+              message: "Please pick an image for Item.",
             );
           }
       );
@@ -449,8 +463,8 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
       "itemID": uniqueIdName,
       //"menuID": widget.model!.menuID,
       "sellerUID": sharedPreferences!.getString("uid"),
-      "sellerName": sharedPreferences!.getString("name"),
-      "shortInfo": shortInfoController.text.toString(),
+      "sellerName": sharedPreferences!.getString("name")?.toUpperCase(),
+      //"shortInfo": shortInfoController.text.toString().toUpperCase(),
       "longDescription": descriptionController.text.toString(),
       "price": int.parse(priceController.text),
       "discountPrice": int.parse(discountPriceController.text),
@@ -469,7 +483,7 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
         //"menuID": widget.model!.menuID,
         "sellerUID": sharedPreferences!.getString("uid"),
         "sellerName": sharedPreferences!.getString("name"),
-        "shortInfo": shortInfoController.text.toString(),
+        //"shortInfo": shortInfoController.text.toString(),
         "longDescription": descriptionController.text.toString(),
         "price": int.parse(priceController.text),
         "discountPrice": int.parse(discountPriceController.text),
@@ -486,7 +500,9 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
         uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
         uploading = false;
       });
+      Navigator.push(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
     });
+
   }
 
   uploadImage(mImageFile) async
@@ -508,6 +524,6 @@ class _ItemsUploadScreenState extends State<ItemsUploadScreen>
   @override
   Widget build(BuildContext context)
   {
-    return imageXFile == null ? defaultScreen() : itemsUploadFormScreen();
+    return itemsUploadFormScreen();
   }
 }

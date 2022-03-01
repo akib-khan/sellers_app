@@ -4,7 +4,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:sellers_app/authentication/auth_screen.dart';
 import 'package:sellers_app/global/global.dart';
 import 'package:sellers_app/mainScreens/itemsScreen.dart';
+import 'package:sellers_app/model/items.dart';
 import 'package:sellers_app/model/menus.dart';
+import 'package:sellers_app/uploadScreens/items_upload_screen.dart';
 import 'package:sellers_app/uploadScreens/menus_upload_screen.dart';
 import 'package:sellers_app/widgets/info_design.dart';
 import 'package:sellers_app/widgets/my_drawer.dart';
@@ -52,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.post_add, color: Colors.cyan,),
             onPressed: ()
             {
-              Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsUploadScreen()));
             },
           ),
         ],
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index)
                       {
-                        Menus model1= Menus.fromJson(
+                        Items model1= Items.fromJson(
                           snapshot.data!.docs[index].data()! as Map<String, dynamic>,
                         );
                         return InfoDesignWidget(

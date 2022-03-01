@@ -6,7 +6,7 @@ class Items
   String? sellerUID;
   String? itemID;
   String? title;
-  String? shortInfo;
+  //String? shortInfo;
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? longDescription;
@@ -20,7 +20,7 @@ class Items
     this.sellerUID,
     this.itemID,
     this.title,
-    this.shortInfo,
+    //this.shortInfo,
     this.publishedDate,
     this.thumbnailUrl,
     this.longDescription,
@@ -33,7 +33,7 @@ class Items
     sellerUID = json['sellerUID'];
     itemID = json['itemID'];
     title = json['title'];
-    shortInfo = json['shortInfo'];
+    //shortInfo = json['shortInfo'];
     publishedDate = json['publishedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     longDescription = json['longDescription'];
@@ -50,7 +50,7 @@ class Items
     data['sellerUID'] = sellerUID;
     data['itemID'] = itemID;
     data['title'] = title;
-    data['shortInfo'] = shortInfo;
+    //data['shortInfo'] = shortInfo;
     data['price'] = price;
     data['publishedDate'] = publishedDate;
     data['thumbnailUrl'] = thumbnailUrl;

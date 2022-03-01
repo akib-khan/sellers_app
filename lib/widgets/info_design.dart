@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sellers_app/global/global.dart';
 import 'package:sellers_app/mainScreens/itemsScreen.dart';
+import 'package:sellers_app/model/items.dart';
 import 'package:sellers_app/model/menus.dart';
 
 
 
 class InfoDesignWidget extends StatefulWidget
 {
-  Menus? model;
+  Items? model;
   BuildContext? context;
 
   InfoDesignWidget({this.model, this.context});
@@ -65,7 +66,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.model!.menuTitle!,
+                    widget.model!.title!,
                     style: const TextStyle(
                       color: Colors.cyan,
                       fontSize: 20,
